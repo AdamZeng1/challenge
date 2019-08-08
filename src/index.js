@@ -84,18 +84,24 @@ const Menu = ({data}) => {
                     <p>id: {m.id}</p> */}
                     { Object.keys(m).map((dKey,i)=>{
                         //console.log(m[dKey]);
+                        const condition = dKey !== "params" && dKey !== "states";
+                        const content = (<p>{Array(dKey, m[dKey]).join(': ')}</p>);
+                        //console.log(typeof content);
+                        const params = (
+                            dKey === "params" && <Card title="params">
+                                { Object.keys(m[dKey]).map((pKey, i)=>{
+                                    return(
+                                        <p key={pKey}>{pKey}: {m[dKey][pKey]}</p>
+                                    )
+                                })}
+                            </Card>
+                        )
+
                         return (
+                            //content will render all the keys and values except states and params
+                            //params will render all the keys and values contented in params object.
                             <div key={dKey+i}>
-                                {dKey !== "params" ? 
-                                    <p>{dKey}: {m[dKey]}</p> 
-                                    : <Card title="params">
-                                        {dKey === "params" && Object.keys(m[dKey]).map((pKey, i)=>{
-                                            return(
-                                                <p key={pKey}>{pKey}: {m[dKey][pKey]}</p>
-                                            )
-                                        })}
-                                    </Card>}
- 
+                                {condition ? content : params}
                             </div>
                            
                         )
