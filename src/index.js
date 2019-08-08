@@ -74,11 +74,11 @@ const Menu = ({data}) => {
         <ul>
 
             {data.map((m,i) => {
-                return (<Card title={m.type} extra={<a href="#">More</a>} style={{width: 300}}>
+                return (<Card key={i} title={m.type} extra={<a href="#">More</a>} style={{width: 300}}>
                     <p>policy: {m.policy}</p>
                     <p>description: {m.description} </p>
                     <p>id: {m.id}</p>
-                    { m.states&& <Menu key={i} data={m.states}/>}
+                    { m.states&& <Menu data={m.states}/>}
                 </Card>);
             })}
         </ul>
