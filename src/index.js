@@ -18,46 +18,46 @@ import 'antd/dist/antd.css';
 // 2.
 let data1 = [
     {
-        "type":"container",
-        "policy":"sequence",
-        "description":"concurrence2.1",
-        "id":"ce1071f4-523c-4695-ae51-ca04f89a25e8",
-        "states":[
+        "type": "container",
+        "policy": "sequence",
+        "description": "concurrence2.1",
+        "id": "ce1071f4-523c-4695-ae51-ca04f89a25e8",
+        "states": [
             {
-                "type":"container",
-                "policy":"sequence",
-                "description":"Iterator",
-                "id":"cb6ef8b8-ad9c-44f2-94b1-b5817d01b025",
-                "states":[
+                "type": "container",
+                "policy": "sequence",
+                "description": "Iterator",
+                "id": "cb6ef8b8-ad9c-44f2-94b1-b5817d01b025",
+                "states": [
                     {
-                        "type":"skill",
-                        "name":"sleep",
-                        "robot":"0f5e357a-a672-4acc-aaf6-833c0351bcb0",
-                        "description":"123",
-                        "params":{
-                            "sleep_time":0
+                        "type": "skill",
+                        "name": "sleep",
+                        "robot": "0f5e357a-a672-4acc-aaf6-833c0351bcb0",
+                        "description": "123",
+                        "params": {
+                            "sleep_time": 0
                         },
-                        "id":"613c00f9-431a-468d-a21a-fc9b2639edc5"
+                        "id": "613c00f9-431a-468d-a21a-fc9b2639edc5"
                     },
                     {
-                        "type":"container",
-                        "policy":"sequence",
-                        "description":"123",
-                        "id":"30ee2e4f-018b-4a33-bcbe-82e4a9ad1ae6",
-                        "states":[
+                        "type": "container",
+                        "policy": "sequence",
+                        "description": "123",
+                        "id": "30ee2e4f-018b-4a33-bcbe-82e4a9ad1ae6",
+                        "states": [
                             {
-                                "type":"skill",
-                                "name":"show_and_tell",
-                                "robot":"0f5e357a-a672-4acc-aaf6-833c0351bcb0",
-                                "description":"Show And Tell",
-                                "params":{
-                                    "text":"great\n",
-                                    "animated":true,
-                                    "mode":"contextual",
-                                    "duration":5,
-                                    "disable_wait_for_finish":false
+                                "type": "skill",
+                                "name": "show_and_tell",
+                                "robot": "0f5e357a-a672-4acc-aaf6-833c0351bcb0",
+                                "description": "Show And Tell",
+                                "params": {
+                                    "text": "great\n",
+                                    "animated": true,
+                                    "mode": "contextual",
+                                    "duration": 5,
+                                    "disable_wait_for_finish": false
                                 },
-                                "id":"e4c4c0e5-e9ab-4ff9-8733-d8425814c559"
+                                "id": "e4c4c0e5-e9ab-4ff9-8733-d8425814c559"
                             }
                         ]
                     }
@@ -67,46 +67,46 @@ let data1 = [
     }
 ];
 
-
+// used for params
+const params = ({paramObject, dKey, judge}) => {
+    return (
+        dKey === judge && <Card title="params">
+            // m[dKey]
+            {Object.keys(paramObject).map((pKey, i) => {
+                return (
+                    <p key={pKey}>{pKey}: {paramObject[pKey]}</p>
+                )
+            })}
+        </Card>
+    )
+};
 
 const Menu = ({data}) => {
-    // let parseData = Object.keys(data)
-    //     .map((dKey)=>{
-    //         return 
-    //     })
     return (
         <ul>
-
-            {data.map((m,i) => {
+            {data.map((m, i) => {
                 return (<Card key={i} title={m.type} extra={<a href="#">More</a>} style={{width: 300}}>
-                    {/* <p>policy: {m.policy}</p>
-                    <p>description: {m.description} </p>
-                    <p>id: {m.id}</p> */}
-                    { Object.keys(m).map((dKey,i)=>{
-                        //console.log(m[dKey]);
-                        const condition = dKey !== "params" && dKey !== "states";
-                        const content = (<p>{Array(dKey, m[dKey]).join(': ')}</p>);
-                        //console.log(typeof content);
-                        const params = (
-                            dKey === "params" && <Card title="params">
-                                { Object.keys(m[dKey]).map((pKey, i)=>{
-                                    return(
-                                        <p key={pKey}>{pKey}: {m[dKey][pKey]}</p>
-                                    )
-                                })}
-                            </Card>
-                        )
+
+                    {Object.keys(m).map((dKey, i) => {
+                        // dKey is just a normal value not array or object
+                        const condition = typeof m[dKey] !== "object";
+                        // join content dKey and value of dKey
+                        const content = (<p>{dKey + ": " + m[dKey]}</p>);
+                        // render object params
+                        const params = (<param paramObject={m[dKey]} dKey={dKey} judge="params"/>);
 
                         return (
-                            //content will render all the keys and values except states and params
-                            //params will render all the keys and values contented in params object.
-                            <div key={dKey+i}>
+                            <div key={dKey + i}>
+
+                                {/*//content will render all the keys and values except states and params*/}
+                                {/*//params will render all the keys and values contented in params object.*/}
+                                {/*// render content if value of dKey is just a value not array or object*/}
                                 {condition ? content : params}
                             </div>
-                           
+
                         )
                     })}
-                    { m.states&& <Menu data={m.states}/>}
+                    {m.states && <Menu data={m.states}/>}
                 </Card>);
             })}
         </ul>
