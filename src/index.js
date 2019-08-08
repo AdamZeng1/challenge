@@ -70,14 +70,36 @@ let data1 = [
 
 
 const Menu = ({data}) => {
+    // let parseData = Object.keys(data)
+    //     .map((dKey)=>{
+    //         return 
+    //     })
     return (
         <ul>
 
             {data.map((m,i) => {
                 return (<Card key={i} title={m.type} extra={<a href="#">More</a>} style={{width: 300}}>
-                    <p>policy: {m.policy}</p>
+                    {/* <p>policy: {m.policy}</p>
                     <p>description: {m.description} </p>
-                    <p>id: {m.id}</p>
+                    <p>id: {m.id}</p> */}
+                    { Object.keys(m).map((dKey,i)=>{
+                        //console.log(m[dKey]);
+                        return (
+                            <div key={dKey+i}>
+                                {dKey !== "params" ? 
+                                    <p>{dKey}: {m[dKey]}</p> 
+                                    : <Card title="params">
+                                        {dKey === "params" && Object.keys(m[dKey]).map((pKey, i)=>{
+                                            return(
+                                                <p key={pKey}>{pKey}: {m[dKey][pKey]}</p>
+                                            )
+                                        })}
+                                    </Card>}
+ 
+                            </div>
+                           
+                        )
+                    })}
                     { m.states&& <Menu data={m.states}/>}
                 </Card>);
             })}
